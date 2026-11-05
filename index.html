@@ -25,12 +25,22 @@ body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px
 .glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(900px 500px at 80% 10%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 70%),radial-gradient(700px 500px at 10% 100%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 70%);transition:background .6s}
 
 /* Sidebar */
-.rail{position:fixed;top:0;left:0;bottom:0;width:var(--rail);z-index:5;background:var(--panel);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:22px;padding:calc(24px + env(safe-area-inset-top,0px)) 18px calc(20px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
+.rail{position:fixed;top:0;left:0;bottom:0;width:var(--rail);z-index:5;background:var(--panel);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:22px;overflow-y:auto;padding:calc(24px + env(safe-area-inset-top,0px)) 18px calc(20px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
 .brand{display:flex;align-items:center;gap:12px;padding:0 6px}
 .brand-mark{width:36px;height:36px;border-radius:10px;background:conic-gradient(from 200deg,#7c8cff,#4fd1c5,#f472b6,#fbbf24,#7c8cff);animation:spin 12s linear infinite;flex:none}
 .brand b{font-family:var(--display);font-size:15px;letter-spacing:.02em;display:block;line-height:1.2}
 .brand small{font-family:var(--mono);font-size:11px;color:var(--muted)}
-.nav-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:0 8px;margin-bottom:-14px}
+.nav-label{display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:0 8px;margin:14px 0 4px}
+.nav-label em{font-style:normal;letter-spacing:.06em;font-size:9.5px;padding:2px 6px;border-radius:5px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+nav a.soon-item{color:var(--muted)}
+nav a.soon-item .dot{background:rgba(255,255,255,.04);color:var(--muted);border:1px dashed var(--line)}
+.lock-card{margin-top:40px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.lock-card div{padding:18px;border-radius:14px;border:1px dashed var(--line);background:var(--panel)}
+.lock-card b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--c);margin-bottom:6px;font-weight:500}
+.lock-card span{font-size:14px;color:var(--muted)}
+.price{display:inline-flex;align-items:baseline;gap:6px;margin-top:26px;font-family:var(--display);font-weight:700;font-size:28px;color:var(--fg)}
+.price small{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--muted)}
+@media (max-width:860px){.lock-card{grid-template-columns:minmax(0,1fr)}}
 nav{display:flex;flex-direction:column;gap:4px}
 nav a{display:flex;align-items:center;gap:12px;padding:10px 10px;border-radius:10px;color:var(--fg);text-decoration:none;font-weight:600;font-size:14px;border:1px solid transparent;transition:background .2s,border-color .2s,transform .2s}
 nav a:hover{background:rgba(255,255,255,.04);transform:translateX(3px)}
@@ -183,7 +193,6 @@ footer{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--mute
     <div class="brand-mark" aria-hidden="true"></div>
     <div><b>Studio Hub</b><small>Windows apps · free</small></div>
   </div>
-  <div class="nav-label">Browse</div>
   <nav id="nav"></nav>
   <div class="rail-foot">
     <a class="discord" id="discordLink" href="#" target="_blank" rel="noopener">
@@ -218,6 +227,7 @@ const ICONS = {
   server:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h7"/><path d="M17 15v6M14 18h6"/></svg>',
   bot:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M9 14h.01M15 14h.01"/></svg>',
   beat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 21h16"/></svg>'
 };
 
@@ -272,6 +282,15 @@ const APPS = [
     ]}
 ];
 
+/* Paid software placeholders: rename and fill in when they're ready */
+const PAID = [
+  { id:"paid-1", name:"Coming Soon", slot:1 },
+  { id:"paid-2", name:"Coming Soon", slot:2 },
+  { id:"paid-3", name:"Coming Soon", slot:3 },
+  { id:"paid-4", name:"Coming Soon", slot:4 }
+];
+const PAID_COLOR = "#a78bfa";
+
 const nav = document.getElementById("nav");
 const main = document.getElementById("main");
 const glow = document.getElementById("glow");
@@ -283,8 +302,21 @@ function navItem(id, label, icon, color, ver){
   a.innerHTML = `<span class="dot">${ICONS[icon]}</span>${label}${ver ? `<span class="ver">${ver}</span>` : ""}`;
   return a;
 }
+function navLabel(text, tag){
+  const d = document.createElement("div");
+  d.className = "nav-label";
+  d.innerHTML = `<span>${text}</span>${tag ? `<em>${tag}</em>` : ""}`;
+  return d;
+}
 nav.appendChild(navItem("home","Home","home"));
+nav.appendChild(navLabel("Free Software", APPS.length));
 APPS.forEach(app => nav.appendChild(navItem(app.id, app.name, app.icon, app.color, CONFIG.apps[app.id]?.version)));
+nav.appendChild(navLabel("Paid Software", "Soon"));
+PAID.forEach(p => {
+  const a = navItem(p.id, p.name, "lock", null, "#" + p.slot);
+  a.classList.add("soon-item");
+  nav.appendChild(a);
+});
 
 function setLink(el, url){
   if (url){ el.href = url; el.removeAttribute("aria-disabled"); el.title = ""; }
@@ -370,14 +402,30 @@ function appView(app){
   </div>`;
 }
 
+function paidView(p){
+  return `<div class="page" style="--c:${PAID_COLOR}">
+    <div class="hero-row"><span class="dot">${ICONS.lock}</span><div class="eyebrow">Paid Software · Slot ${p.slot}</div></div>
+    <h1>Something new is <em>in the works</em></h1>
+    <p class="lead">This spot is saved for an upcoming paid app. Join the Discord to hear about it first and get a say in what it does.</p>
+    <div class="price">$ — <small>price announced at launch</small></div>
+    <div class="lock-card">
+      <div><b>Status</b><span>In development</span></div>
+      <div><b>Platform</b><span>Windows 10 &amp; 11</span></div>
+      <div><b>Updates</b><span>Announced on Discord</span></div>
+    </div>
+    ${credits()}
+  </div>`;
+}
+
 function route(){
   const id = (location.hash || "#home").slice(1);
   const app = APPS.find(a => a.id === id);
-  main.innerHTML = app ? appView(app) : homeView();
-  const color = app ? app.color : "#7c8cff";
+  const paid = PAID.find(p => p.id === id);
+  main.innerHTML = app ? appView(app) : paid ? paidView(paid) : homeView();
+  const color = app ? app.color : paid ? PAID_COLOR : "#7c8cff";
   document.documentElement.style.setProperty("--accent", color);
   field.tint = color;
-  nav.querySelectorAll("a").forEach(a => a.classList.toggle("active", a.dataset.id === (app ? id : "home")));
+  nav.querySelectorAll("a").forEach(a => a.classList.toggle("active", a.dataset.id === (app || paid ? id : "home")));
   document.body.classList.remove("open");
   window.scrollTo(0,0);
 }
