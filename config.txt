@@ -1,0 +1,11 @@
+const CONFIG = {
+  // Paste your Google Sheet's "Publish to web" CSV link here. Leave "" to use the CHANGELOG list below instead.
+  changelogSheet: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyxzXqijnpZ_OgjcRywAsR-o2fesoj2S52601t7FeajWFYhjy9GzqpCkRaovEnm-H6E5FroxgGefYT/pub?gid=769564091&single=true&output=csv",
+  discordInvite: "https://discord.gg/tCBK8pGMB5",
+  apps: {
+    "taskbar-studio": { newRelease: "no", download: "", installer: "", gif: "taskbar.gif", version: "v1.0.0", size: "" },
+    "server-studio":  { newRelease: "no", download: "", installer: "", gif: "server.gif", version: "v1.0.0", size: "" },
+    "bot-studio":     { newRelease: "yes", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567788878205820938/Bot_Studio.zip?ex=6aed74ac&is=6aec232c&hm=5d7cb779c5caf135f2cd4593365e2d5bdfc943db22f890df0d1109ae970ba18a&", installer: "", gif: "bot.gif", version: "v1.0.0", size: "71.97 MB" },
+    "beat-studiox":   { newRelease: "yes", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567751347149873162/Beat_Studio_X.zip?ex=6aed51b8&is=6aec0038&hm=abc31a2a153012903ed5c1be86e11fd0a8dafd5d03fa3321ca29b39931200483&", installer: "https://github.com/Naxune002/beat-studiox/releases/download/v2.0.0/Beat-StudioX-Setup-2.0.0.exe", gif: "beat.gif", version: "v2.4.1", size: "71.14 MB" }
+  }
+};
