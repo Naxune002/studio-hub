@@ -81,13 +81,17 @@ h2{font-family:var(--display);font-weight:700;font-size:20px;margin:0 0 6px;text
 .hero-row .dot svg{width:32px;height:32px}
 .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
 .chip{font-family:var(--mono);font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:rgba(255,255,255,.02)}
-.dl{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:28px}
+.dl{display:flex;flex-wrap:wrap;align-items:flex-start;gap:14px 16px;margin-top:28px}
 .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;border:0;cursor:pointer;font-family:var(--body);background:var(--c);color:#0a0b10;box-shadow:0 10px 30px -10px var(--c);transition:transform .2s,filter .2s}
 .btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
 .btn svg{width:18px;height:18px}
 .btn.pending{background:transparent;color:var(--muted);border:1px dashed var(--line);box-shadow:none;cursor:default}
 .btn.pending:hover{transform:none}
 .dl-note{font-size:13px;color:var(--muted)}
+.dl-opt{display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.dl-sub{font-size:12px;color:var(--muted);padding-left:4px}
+.btn.alt{background:transparent;color:var(--fg);border:1.5px solid var(--c);box-shadow:0 0 0 0 transparent,inset 0 0 20px -10px var(--c)}
+.btn.alt:hover{background:color-mix(in srgb,var(--c) 14%,transparent)}
 .features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:36px 0 0;padding:0;list-style:none}
 .features li{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font-size:14px}
 .features li::before{content:"";flex:none;width:7px;height:7px;border-radius:2px;background:var(--c);margin-top:8px}
@@ -220,15 +224,17 @@ nav .nm{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-wi
    EDIT THESE: paste your links here.
    Leave a download "" and its button shows "Download coming soon".
    gif: link to a .gif showing how to open the app (blank = animated demo).
+   download: portable version link. installer: installer link (needed for auto update).
+   Each button only shows if its link is filled in.
    newRelease: "yes" shows a NEW RELEASE tag in the sidebar and page header, "no" hides it.
    ============================================================ */
 const CONFIG = {
   discordInvite: "https://discord.gg/tCBK8pGMB5",
   apps: {
-    "taskbar-studio": { newRelease: "no", download: "", gif: "taskbar.gif", version: "v1.0.0", size: "" },
-    "server-studio":  { newRelease: "no", download: "", gif: "server.gif", version: "v1.0.0", size: "" },
-    "bot-studio":     { newRelease: "yes", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567788878205820938/Bot_Studio.zip?ex=6aed74ac&is=6aec232c&hm=5d7cb779c5caf135f2cd4593365e2d5bdfc943db22f890df0d1109ae970ba18a&", gif: "bot.gif", version: "v1.0.0", size: "71.97 MB" },
-    "beat-studiox":   { newRelease: "yes", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567751347149873162/Beat_Studio_X.zip?ex=6aed51b8&is=6aec0038&hm=abc31a2a153012903ed5c1be86e11fd0a8dafd5d03fa3321ca29b39931200483&", gif: "beat.gif", version: "v1.0.0", size: "71.14 MB" }
+    "taskbar-studio": { newRelease: "no", download: "", installer: "", gif: "taskbar.gif", version: "v1.0.0", size: "" },
+    "server-studio":  { newRelease: "no", download: "", installer: "", gif: "server.gif", version: "v1.0.0", size: "" },
+    "bot-studio":     { newRelease: "yes", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567788878205820938/Bot_Studio.zip?ex=6aed74ac&is=6aec232c&hm=5d7cb779c5caf135f2cd4593365e2d5bdfc943db22f890df0d1109ae970ba18a&", installer: "", gif: "bot.gif", version: "v1.0.0", size: "71.97 MB" },
+    "beat-studiox":   { newRelease: "yes", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567751347149873162/Beat_Studio_X.zip?ex=6aed51b8&is=6aec0038&hm=abc31a2a153012903ed5c1be86e11fd0a8dafd5d03fa3321ca29b39931200483&", installer: "", gif: "beat.gif", version: "v1.0.0", size: "71.14 MB" }
   }
 };
 
@@ -395,15 +401,22 @@ function gifSign(app, cfg){
 
 function appView(app){
   const cfg = CONFIG.apps[app.id] || {};
-  const btn = cfg.download
-    ? `<a class="btn" href="${cfg.download}" target="_blank" rel="noopener">${ICONS.down}Download for Windows</a>`
-    : `<span class="btn pending">${ICONS.down}Download coming soon</span>`;
+  const opts = [];
+  if (cfg.download) opts.push(`<div class="dl-opt">
+      <a class="btn" href="${cfg.download}" target="_blank" rel="noopener">${ICONS.down}Download Portable</a>
+      <span class="dl-sub">No install needed${cfg.size ? " · " + cfg.size : ""}</span>
+    </div>`);
+  if (cfg.installer) opts.push(`<div class="dl-opt">
+      <a class="btn alt" href="${cfg.installer}" target="_blank" rel="noopener">${ICONS.down}Download Installer</a>
+      <span class="dl-sub">This is required for auto update</span>
+    </div>`);
+  const btn = opts.length ? opts.join("") : `<span class="btn pending">${ICONS.down}Download coming soon</span>`;
   return `<div class="page app-layout" style="--c:${app.color}">
     <div class="col-main">
     <div class="hero-row"><span class="dot">${ICONS[app.icon]}</span><div class="eyebrow">${app.tag}</div></div>
     <div class="h1-row"><h1>${app.name}</h1>${isNew(cfg.newRelease) ? newTag(true) : ""}</div>
     <p class="lead">${app.blurb}</p>
-    <div class="dl">${btn}<span class="dl-note">${app.exe}${cfg.size ? " · " + cfg.size : ""}</span></div>
+    <div class="dl">${btn}</div>
     <div class="meta">
       <span class="chip">${cfg.version || "v1.0.0"}</span><span class="chip">Windows 10 / 11</span><span class="chip">64-bit</span><span class="chip">Free</span>
     </div>
