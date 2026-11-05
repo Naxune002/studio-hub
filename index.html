@@ -109,7 +109,35 @@ code,kbd{font-family:var(--mono);font-size:12.5px;background:rgba(255,255,255,.0
 /* Tool page: content + hanging GIF sign */
 .app-layout{max-width:1240px;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px 56px;align-items:start}
 .col-main{min-width:0}
-.col-side{position:sticky;top:28px;min-width:0}
+.col-side{min-width:0;display:flex;flex-direction:column;gap:28px}
+/* Changelog */
+.log{border-radius:18px;padding:20px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line)}
+.log-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+.log-head h2{font-size:17px;margin:0}
+.log-head span{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.log-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.rel{position:relative;padding:0 0 18px 22px}
+.rel::before{content:"";position:absolute;left:4px;top:7px;width:9px;height:9px;border-radius:50%;background:var(--panel-solid);border:2px solid var(--line)}
+.rel:first-child::before{border-color:var(--c);background:var(--c);box-shadow:0 0 12px var(--c)}
+.rel:not(:last-child)::after{content:"";position:absolute;left:8px;top:20px;bottom:0;width:1px;background:var(--line)}
+.rel-top{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px}
+.rel-ver{font-family:var(--display);font-weight:700;font-size:14px}
+.rel-date{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.latest{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;padding:2px 7px;border-radius:999px;color:var(--c);border:1px solid color-mix(in srgb,var(--c) 50%,transparent);background:color-mix(in srgb,var(--c) 12%,transparent)}
+.rel-title{font-size:13px;color:var(--fg);margin:3px 0 0}
+.chg{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.chg li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:baseline;font-size:13px;color:var(--muted);line-height:1.45}
+.ct{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;padding:2px 6px;border-radius:5px;text-transform:uppercase;white-space:nowrap}
+.ct.new{color:#4ade80;background:rgba(74,222,128,.12)}
+.ct.improved{color:#60a5fa;background:rgba(96,165,250,.12)}
+.ct.fix{color:#fbbf24;background:rgba(251,191,36,.12)}
+.ct.removed{color:#f87171;background:rgba(248,113,113,.12)}
+.ct.note{color:var(--muted);background:rgba(255,255,255,.06)}
+.log-more summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:12px;color:var(--c);padding:4px 0 2px 22px}
+.log-more summary::-webkit-details-marker{display:none}
+.log-more summary:focus-visible{outline:2px solid var(--c);outline-offset:2px;border-radius:4px}
+.log-more[open] summary{margin-bottom:14px}
+.log-empty{font-size:13px;color:var(--muted);margin:0}
 .col-full{grid-column:1/-1;min-width:0}
 .sign{position:relative;padding-top:52px;transform-origin:50% 6px;animation:swing 7s ease-in-out infinite}
 .hook{position:absolute;top:0;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--panel-solid);border:2px solid color-mix(in srgb,var(--c) 60%,var(--line));box-shadow:0 0 14px -2px var(--c);z-index:1}
@@ -156,7 +184,7 @@ code,kbd{font-family:var(--mono);font-size:12.5px;background:rgba(255,255,255,.0
 @keyframes menu{0%,22%{opacity:0;transform:translateY(12%)}27%,50%{opacity:1;transform:none}55%,100%{opacity:0;transform:translateY(6%)}}
 @keyframes pop{0%,52%{opacity:0;transform:scale(.6)}60%,92%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
 @keyframes appIcon{0%,55%{opacity:0}60%,92%{opacity:1}100%{opacity:0}}
-@media (max-width:1180px){.app-layout{grid-template-columns:minmax(0,1fr)}.col-side{position:static;max-width:460px;width:100%}}
+@media (max-width:1180px){.app-layout{grid-template-columns:minmax(0,1fr)}.col-side{max-width:460px;width:100%}}
 
 /* Credits */
 .credits{margin-top:64px;padding:28px;border-radius:18px;border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);position:relative;overflow:hidden}
@@ -237,6 +265,40 @@ const CONFIG = {
     "beat-studiox":   { newRelease: "yes", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567751347149873162/Beat_Studio_X.zip?ex=6aed51b8&is=6aec0038&hm=abc31a2a153012903ed5c1be86e11fd0a8dafd5d03fa3321ca29b39931200483&", installer: "https://github.com/Naxune002/beat-studiox/releases/download/v2.0.0/Beat-StudioX-Setup-2.0.0.exe", gif: "beat.gif", version: "v2.2.0", size: "71.14 MB" }
   }
 };
+
+/* ============================================================
+   CHANGELOG: add new versions at the TOP of each app's list.
+   Start each change with New:, Improved:, Fix:, Removed: or Note:
+   to give it a colored tag. Copy a { ... } block to add a version.
+   ============================================================ */
+const CHANGELOG = {
+  "taskbar-studio": [
+    { version: "v1.0.0", date: "Nov 2026", title: "First release", changes: [
+      "New: Theme gallery with live apply",
+      "New: Animated themes tab",
+      "New: Runs from the system tray when closed"
+    ]}
+  ],
+  "server-studio": [
+    { version: "v1.0.0", date: "Nov 2026", title: "First release", changes: [
+      "New: Built-in server templates",
+      "New: Live preview while building"
+    ]}
+  ],
+  "bot-studio": [
+    { version: "v1.0.0", date: "Nov 2026", title: "First release", changes: [
+      "New: Host several bots at once",
+      "New: Per-bot profile editor and live chat"
+    ]}
+  ],
+  "beat-studiox": [
+    { version: "v1.0.0", date: "Nov 2026", title: "First release", changes: [
+      "New: Drag-and-drop sound icons",
+      "New: Up to 7 extra rows of performers"
+    ]}
+  ]
+};
+const LOG_SHOWN = 3; // versions shown before "Show older"
 
 const ICONS = {
   home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
@@ -399,6 +461,34 @@ function gifSign(app, cfg){
   </div>`;
 }
 
+function changeItem(line){
+  const m = String(line).match(/^\s*(new|added|improved|changed|fix|fixed|removed|note)\s*:\s*(.*)$/i);
+  if (!m) return `<li><span class="ct note">Note</span><span>${line}</span></li>`;
+  const map = { new:"new", added:"new", improved:"improved", changed:"improved", fix:"fix", fixed:"fix", removed:"removed", note:"note" };
+  const k = map[m[1].toLowerCase()];
+  const label = { new:"New", improved:"Improved", fix:"Fix", removed:"Removed", note:"Note" }[k];
+  return `<li><span class="ct ${k}">${label}</span><span>${m[2]}</span></li>`;
+}
+function release(r, i){
+  return `<li class="rel">
+    <div class="rel-top"><span class="rel-ver">${r.version || ""}</span>${r.date ? `<span class="rel-date">${r.date}</span>` : ""}${i === 0 ? `<span class="latest">LATEST</span>` : ""}</div>
+    ${r.title ? `<p class="rel-title">${r.title}</p>` : ""}
+    <ul class="chg">${(r.changes || []).map(changeItem).join("")}</ul>
+  </li>`;
+}
+function changelog(app){
+  const list = CHANGELOG[app.id] || [];
+  const shown = list.slice(0, LOG_SHOWN), older = list.slice(LOG_SHOWN);
+  const body = list.length
+    ? `<ul class="log-list">${shown.map(release).join("")}</ul>
+       ${older.length ? `<details class="log-more"><summary>Show ${older.length} older version${older.length > 1 ? "s" : ""}</summary><ul class="log-list">${older.map((r,i) => release(r, i + LOG_SHOWN)).join("")}</ul></details>` : ""}`
+    : `<p class="log-empty">No updates posted yet.</p>`;
+  return `<section class="log" aria-label="${app.name} changelog">
+    <div class="log-head"><h2>Changelog</h2><span>${list.length} release${list.length === 1 ? "" : "s"}</span></div>
+    ${body}
+  </section>`;
+}
+
 function appView(app){
   const cfg = CONFIG.apps[app.id] || {};
   const opts = [];
@@ -424,7 +514,7 @@ function appView(app){
     <div class="steps-head"><h2>Install it step by step</h2><span>${app.steps.length} steps · about 2 minutes</span></div>
     <ol class="steps">${app.steps.map(s => `<li><div><h3>${s[0]}</h3><p>${s[1]}</p></div></li>`).join("")}</ol>
     </div>
-    <aside class="col-side">${gifSign(app, cfg)}</aside>
+    <aside class="col-side">${gifSign(app, cfg)}${changelog(app)}</aside>
     <div class="col-full">${credits()}</div>
   </div>`;
 }
