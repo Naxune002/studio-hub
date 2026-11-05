@@ -173,6 +173,16 @@ footer{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--mute
   .menu-btn{display:inline-flex;align-items:center;gap:8px;position:fixed;z-index:6;top:calc(14px + env(safe-area-inset-top,0px));left:max(14px,env(safe-area-inset-left,0px));padding:10px 14px;border-radius:10px;background:var(--panel-solid);border:1px solid var(--line);color:var(--fg);font-family:var(--body);font-weight:700;font-size:14px;cursor:pointer}
   .apps,.features,.credit-grid{grid-template-columns:minmax(0,1fr)}
 }
+/* NEW RELEASE tag */
+nav .nm{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;line-height:1.2}
+.new-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.14em;padding:3px 8px;border-radius:999px;color:#0a0b10;background:linear-gradient(100deg,var(--c,var(--accent)) 35%,#ffffff 50%,var(--c,var(--accent)) 65%);background-size:250% 100%;animation:shine 2.6s linear infinite;box-shadow:0 0 14px -3px var(--c,var(--accent));white-space:nowrap}
+.new-tag i{width:5px;height:5px;border-radius:50%;background:#0a0b10;animation:blink 1.2s ease-in-out infinite}
+.h1-row{display:flex;align-items:center;flex-wrap:wrap;gap:12px 18px;margin:10px 0 16px}
+.h1-row h1{margin:0}
+.new-tag.big{font-size:12px;padding:7px 15px;gap:8px;box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 18%,transparent),0 0 30px -4px var(--c)}
+.new-tag.big i{width:7px;height:7px}
+@keyframes shine{from{background-position:120% 0}to{background-position:-120% 0}}
+@keyframes blink{50%{opacity:.25}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes rise{from{transform:translateY(14px);opacity:.4}to{transform:none;opacity:1}}
 @keyframes sheen{from{background-position:150% 0}to{background-position:-100% 0}}
@@ -210,14 +220,15 @@ footer{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--mute
    EDIT THESE: paste your links here.
    Leave a download "" and its button shows "Download coming soon".
    gif: link to a .gif showing how to open the app (blank = animated demo).
+   newRelease: "yes" shows a NEW RELEASE tag in the sidebar and page header, "no" hides it.
    ============================================================ */
 const CONFIG = {
   discordInvite: "https://discord.gg/tCBK8pGMB5",
   apps: {
-    "taskbar-studio": { download: "", gif: "taskbar.gif", version: "v1.0.0", size: "" },
-    "server-studio":  { download: "", gif: "server.gif", version: "v1.0.0", size: "" },
-    "bot-studio":     { download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567788878205820938/Bot_Studio.zip?ex=6aed74ac&is=6aec232c&hm=5d7cb779c5caf135f2cd4593365e2d5bdfc943db22f890df0d1109ae970ba18a&", gif: "bot.gif", version: "v1.0.0", size: "71.97 MB" },
-    "beat-studiox":   { download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567751347149873162/Beat_Studio_X.zip?ex=6aed51b8&is=6aec0038&hm=abc31a2a153012903ed5c1be86e11fd0a8dafd5d03fa3321ca29b39931200483&", gif: "beat.gif", version: "v1.0.0", size: "71.14 MB" }
+    "taskbar-studio": { newRelease: "no", download: "", gif: "taskbar.gif", version: "v1.0.0", size: "" },
+    "server-studio":  { newRelease: "no", download: "", gif: "server.gif", version: "v1.0.0", size: "" },
+    "bot-studio":     { newRelease: "no", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567788878205820938/Bot_Studio.zip?ex=6aed74ac&is=6aec232c&hm=5d7cb779c5caf135f2cd4593365e2d5bdfc943db22f890df0d1109ae970ba18a&", gif: "bot.gif", version: "v1.0.0", size: "71.97 MB" },
+    "beat-studiox":   { newRelease: "no", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567751347149873162/Beat_Studio_X.zip?ex=6aed51b8&is=6aec0038&hm=abc31a2a153012903ed5c1be86e11fd0a8dafd5d03fa3321ca29b39931200483&", gif: "beat.gif", version: "v1.0.0", size: "71.14 MB" }
   }
 };
 
@@ -295,11 +306,14 @@ const nav = document.getElementById("nav");
 const main = document.getElementById("main");
 const glow = document.getElementById("glow");
 
-function navItem(id, label, icon, color, ver){
+const isNew = v => v === true || String(v || "").trim().toLowerCase() === "yes";
+const newTag = big => `<span class="new-tag${big ? " big" : ""}"><i></i>NEW RELEASE</span>`;
+
+function navItem(id, label, icon, color, ver, fresh){
   const a = document.createElement("a");
   a.href = "#" + id; a.dataset.id = id;
   if (color) a.style.setProperty("--c", color);
-  a.innerHTML = `<span class="dot">${ICONS[icon]}</span>${label}${ver ? `<span class="ver">${ver}</span>` : ""}`;
+  a.innerHTML = `<span class="dot">${ICONS[icon]}</span><span class="nm">${label}${fresh ? newTag(false) : ""}</span>${ver ? `<span class="ver">${ver}</span>` : ""}`;
   return a;
 }
 function navLabel(text, tag){
@@ -310,7 +324,7 @@ function navLabel(text, tag){
 }
 nav.appendChild(navItem("home","Home","home"));
 nav.appendChild(navLabel("Free Software", APPS.length));
-APPS.forEach(app => nav.appendChild(navItem(app.id, app.name, app.icon, app.color, CONFIG.apps[app.id]?.version)));
+APPS.forEach(app => nav.appendChild(navItem(app.id, app.name, app.icon, app.color, CONFIG.apps[app.id]?.version, isNew(CONFIG.apps[app.id]?.newRelease))));
 nav.appendChild(navLabel("Paid Software", "Soon"));
 PAID.forEach(p => {
   const a = navItem(p.id, p.name, "lock", null, "#" + p.slot);
@@ -387,7 +401,7 @@ function appView(app){
   return `<div class="page app-layout" style="--c:${app.color}">
     <div class="col-main">
     <div class="hero-row"><span class="dot">${ICONS[app.icon]}</span><div class="eyebrow">${app.tag}</div></div>
-    <h1>${app.name}</h1>
+    <div class="h1-row"><h1>${app.name}</h1>${isNew(cfg.newRelease) ? newTag(true) : ""}</div>
     <p class="lead">${app.blurb}</p>
     <div class="dl">${btn}<span class="dl-note">${app.exe}${cfg.size ? " · " + cfg.size : ""}</span></div>
     <div class="meta">
