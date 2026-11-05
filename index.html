@@ -205,6 +205,29 @@ footer{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--mute
   .menu-btn{display:inline-flex;align-items:center;gap:8px;position:fixed;z-index:6;top:calc(14px + env(safe-area-inset-top,0px));left:max(14px,env(safe-area-inset-left,0px));padding:10px 14px;border-radius:10px;background:var(--panel-solid);border:1px solid var(--line);color:var(--fg);font-family:var(--body);font-weight:700;font-size:14px;cursor:pointer}
   .apps,.features,.credit-grid{grid-template-columns:minmax(0,1fr)}
 }
+/* License picker */
+.home-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:40px 0 -24px}
+.buy{margin-top:30px;padding:22px;border-radius:18px;border:1px solid color-mix(in srgb,var(--c) 35%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,var(--c) 10%,var(--panel-solid)),var(--panel) 55%);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.buy-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.buy-head h2{margin:0;font-size:18px}
+.buy-head span{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.plan{position:relative;display:flex;flex-direction:column;gap:6px;padding:16px 16px 16px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.02);cursor:pointer;transition:border-color .2s,background .2s,transform .2s}
+.plan:hover{border-color:color-mix(in srgb,var(--c) 45%,var(--line));transform:translateY(-2px)}
+.plan.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 10%,transparent);box-shadow:0 0 30px -12px var(--c)}
+.plan input{position:absolute;opacity:0;pointer-events:none}
+.plan:has(input:focus-visible){outline:2px solid var(--c);outline-offset:2px}
+.plan-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-right:26px}
+.plan-top b{font-size:15px}
+.plan-top em{font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--c);color:#0a0b10;white-space:nowrap}
+.plan-price{font-family:var(--display);font-weight:700;font-size:24px;font-variant-numeric:tabular-nums}
+.plan-price small{font-family:var(--mono);font-weight:400;font-size:11.5px;color:var(--muted);margin-left:6px}
+.plan-desc{font-size:13px;color:var(--muted)}
+.plan-check{position:absolute;top:15px;right:15px;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line)}
+.plan.on .plan-check{border-color:var(--c);background:radial-gradient(circle,var(--c) 0 42%,transparent 46%)}
+.buy-row{display:flex;align-items:center;flex-wrap:wrap;gap:12px 18px;margin-top:18px}
+.buy-note{font-size:12.5px;color:var(--muted);max-width:42ch;margin:0}
+
 /* NEW RELEASE tag */
 nav .nm{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;line-height:1.2}
 .new-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.14em;padding:3px 8px;border-radius:999px;color:#0a0b10;background:linear-gradient(100deg,var(--c,var(--accent)) 35%,#ffffff 50%,var(--c,var(--accent)) 65%);background-size:250% 100%;animation:shine 2.6s linear infinite;box-shadow:0 0 14px -3px var(--c,var(--accent));white-space:nowrap}
@@ -233,7 +256,7 @@ nav .nm{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-wi
 <aside class="rail" id="rail">
   <div class="brand">
     <div class="brand-mark" aria-hidden="true"></div>
-    <div><b>Studio Hub</b><small>Windows apps · free</small></div>
+    <div><b>Studio Hub</b><small>Windows apps</small></div>
   </div>
   <nav id="nav"></nav>
   <div class="rail-foot">
@@ -258,13 +281,16 @@ nav .nm{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-wi
    ============================================================ */
 const CONFIG = {
   // Paste your Google Sheet's "Publish to web" CSV link here. Leave "" to use the CHANGELOG list below instead.
-  changelogSheet: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyxzXqijnpZ_OgjcRywAsR-o2fesoj2S52601t7FeajWFYhjy9GzqpCkRaovEnm-H6E5FroxgGefYT/pub?gid=769564091&single=true&output=csv",
+  changelogSheet: "",
+  // Paste your Store tab's "Publish to web" CSV link here (license plans, prices, payment links). Leave "" to use PLANS below.
+  storeSheet: "",
   discordInvite: "https://discord.gg/tCBK8pGMB5",
   apps: {
     "taskbar-studio": { newRelease: "no", download: "", installer: "", gif: "taskbar.gif", version: "v1.0.0", size: "" },
     "server-studio":  { newRelease: "no", download: "", installer: "", gif: "server.gif", version: "v1.0.0", size: "" },
-    "bot-studio":     { newRelease: "yes", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567788878205820938/Bot_Studio.zip?ex=6aed74ac&is=6aec232c&hm=5d7cb779c5caf135f2cd4593365e2d5bdfc943db22f890df0d1109ae970ba18a&", installer: "", gif: "bot.gif", version: "v1.0.0", size: "71.97 MB" },
-    "beat-studiox":   { newRelease: "yes", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567751347149873162/Beat_Studio_X.zip?ex=6aed51b8&is=6aec0038&hm=abc31a2a153012903ed5c1be86e11fd0a8dafd5d03fa3321ca29b39931200483&", installer: "https://github.com/Naxune002/beat-studiox/releases/download/v2.0.0/Beat-StudioX-Setup-2.0.0.exe", gif: "beat.gif", version: "v2.4.1", size: "71.14 MB" }
+    "bot-studio":     { newRelease: "no", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567788878205820938/Bot_Studio.zip?ex=6aed74ac&is=6aec232c&hm=5d7cb779c5caf135f2cd4593365e2d5bdfc943db22f890df0d1109ae970ba18a&", installer: "", gif: "bot.gif", version: "v1.0.0", size: "71.97 MB" },
+    "bot-builder-studio": { newRelease: "yes", download: "", installer: "https://github.com/naxune002/bot-builder-studio-releases/releases/latest", gif: "botbuilder.gif", version: "v1.0.0", size: "81.3 MB" },
+    "beat-studiox":   { newRelease: "yes", download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567751347149873162/Beat_Studio_X.zip?ex=6aed51b8&is=6aec0038&hm=abc31a2a153012903ed5c1be86e11fd0a8dafd5d03fa3321ca29b39931200483&", installer: "https://github.com/Naxune002/beat-studiox/releases/download/v2.0.0/Beat-StudioX-Setup-2.0.0.exe", gif: "beat.gif", version: "v1.0.0", size: "71.14 MB" }
   }
 };
 
@@ -274,6 +300,13 @@ const CONFIG = {
    to give it a colored tag. Copy a { ... } block to add a version.
    ============================================================ */
 const CHANGELOG = {
+  "bot-builder-studio": [
+    { version: "v1.0.0", date: "Nov 2026", title: "First release", changes: [
+      "New: Drag-and-drop bot builder with starter blocks",
+      "New: Runs your bots right from the app",
+      "New: License key activation"
+    ]}
+  ],
   "taskbar-studio": [
     { version: "v1.0.0", date: "Nov 2026", title: "First release", changes: [
       "New: Theme gallery with live apply",
@@ -301,6 +334,19 @@ const CHANGELOG = {
   ]
 };
 let SHEET_LOG = null, SHEET_STATE = CONFIG.changelogSheet ? "loading" : "off";
+/* ============================================================
+   PLANS: license options for paid apps (used when storeSheet is blank or can't load).
+   link = the payment page for that plan (e.g. your Gumroad product link).
+   badge = small highlight like "Best value" (optional).
+   ============================================================ */
+const PLANS = {
+  "bot-builder-studio": [
+    { plan: "Monthly",  price: "$4.99",  period: "/ month",  description: "Full access, cancel anytime", link: "", badge: "" },
+    { plan: "Yearly",   price: "$39.99", period: "/ year",   description: "Two months free vs monthly",  link: "", badge: "Best value" },
+    { plan: "Lifetime", price: "$79.99", period: "one-time", description: "Pay once, keep it forever",   link: "", badge: "" }
+  ]
+};
+
 const LOG_SHOWN = 3; // versions shown before "Show older"
 
 const ICONS = {
@@ -309,6 +355,8 @@ const ICONS = {
   server:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h7"/><path d="M17 15v6M14 18h6"/></svg>',
   bot:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M9 14h.01M15 14h.01"/></svg>',
   beat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+  blocks:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/><path d="M13 7h4a2 2 0 0 1 2 2v2M11 17H7a2 2 0 0 1-2-2v-2"/></svg>',
+  key:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="15" r="4"/><path d="m10.8 12.2 8.2-8.2M16 7l3 3M14 9l2 2"/></svg>',
   lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 21h16"/></svg>'
 };
@@ -364,14 +412,27 @@ const APPS = [
     ]}
 ];
 
-/* Paid software placeholders: rename and fill in when they're ready */
+/* Paid software. Entries with a blurb get a full page; the rest show as "Coming Soon". */
 const PAID = [
-  { id:"paid-1", name:"Coming Soon", slot:1 },
+  { id:"bot-builder-studio", name:"Bot Builder Studio", slot:1, icon:"blocks", color:"#38bdf8",
+    tag:"Build Discord bots without code",
+    blurb:"Snap blocks together to build a Discord bot, then run it straight from the app. Start from ready-made starter blocks and add commands, events and replies as you go.",
+    features:["Drag-and-drop block editor","Starter blocks to get going fast","Runs your bots right from the app","Keeps running from the system tray"],
+    exe:"Bot Builder Studio .exe",
+    steps:[
+      ["Download the installer","Press a download button above to save <code>Bot Builder Studio .exe</code>."],
+      ["Run the installer","Open the file. On the SmartScreen warning click <b>More info</b> then <b>Run anyway</b>."],
+      ["Buy a license key","Pick a plan in <b>Choose your license</b> and check out. Your key is emailed to you and shown on the receipt."],
+      ["Activate","Open Bot Builder Studio and paste your license key when it asks."],
+      ["Build your first bot","Paste your bot token, drag in a starter block, and press <b>Run</b>."]
+    ]},
   { id:"paid-2", name:"Coming Soon", slot:2 },
   { id:"paid-3", name:"Coming Soon", slot:3 },
   { id:"paid-4", name:"Coming Soon", slot:4 }
 ];
 const PAID_COLOR = "#a78bfa";
+const PRODUCTS = APPS.concat(PAID.filter(p => p.blurb));   // every app with a full page
+const isPaid = app => !!app.slot;
 
 const nav = document.getElementById("nav");
 const main = document.getElementById("main");
@@ -393,7 +454,7 @@ function navItem(id, label, icon, color, ver, fresh){
   const a = document.createElement("a");
   a.href = "#" + id; a.dataset.id = id;
   if (color) a.style.setProperty("--c", color);
-  a.innerHTML = `<span class="dot">${ICONS[icon]}</span><span class="nm">${label}${fresh ? newTag(false) : ""}</span>${ver ? `<span class="ver"${APPS.some(x => x.id === id) ? ` data-ver="${id}"` : ""}>${ver}</span>` : ""}`;
+  a.innerHTML = `<span class="dot">${ICONS[icon]}</span><span class="nm">${label}${fresh ? newTag(false) : ""}</span>${ver ? `<span class="ver"${PRODUCTS.some(x => x.id === id) ? ` data-ver="${id}"` : ""}>${ver}</span>` : ""}`;
   return a;
 }
 function navLabel(text, tag){
@@ -405,8 +466,13 @@ function navLabel(text, tag){
 nav.appendChild(navItem("home","Home","home"));
 nav.appendChild(navLabel("Free Software", APPS.length));
 APPS.forEach(app => nav.appendChild(navItem(app.id, app.name, app.icon, app.color, appVersion(app.id) || " ", isNew(CONFIG.apps[app.id]?.newRelease))));
-nav.appendChild(navLabel("Paid Software", "Soon"));
+const paidLive = PAID.filter(p => p.blurb).length;
+nav.appendChild(navLabel("Paid Software", paidLive || "Soon"));
 PAID.forEach(p => {
+  if (p.blurb){
+    nav.appendChild(navItem(p.id, p.name, p.icon, p.color, appVersion(p.id) || " ", isNew(CONFIG.apps[p.id]?.newRelease)));
+    return;
+  }
   const a = navItem(p.id, p.name, "lock", null, "#" + p.slot);
   a.classList.add("soon-item");
   nav.appendChild(a);
@@ -429,14 +495,15 @@ function credits(){
       <div><b>Community</b>Feedback and ideas from the Discord server</div>
     </div>
   </section>
-  <footer>© ${new Date().getFullYear()} Charles .B · All apps free to download</footer>`;
+  <footer>© ${new Date().getFullYear()} Charles .B · Free and paid apps for Windows</footer>`;
 }
 
 function homeView(){
   return `<div class="page" style="--c:#7c8cff">
     <div class="eyebrow">Studio Hub</div>
-    <h1>Four apps.<br><em>One place</em> to get them.</h1>
-    <p class="lead">Free Windows tools for customizing your desktop, running Discord servers and bots, and making music. Pick an app from the sidebar for the download and a step-by-step install guide.</p>
+    <h1>${["Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten"][PRODUCTS.length] || PRODUCTS.length} apps.<br><em>One place</em> to get them.</h1>
+    <p class="lead">Windows tools for customizing your desktop, building and running Discord bots and servers, and making music. Pick an app for the download and a step-by-step install guide.</p>
+    <div class="home-label">Free Software</div>
     <div class="apps">
       ${APPS.map(a => `<a class="card" href="#${a.id}" style="--c:${a.color}">
         <span class="dot">${ICONS[a.icon]}</span>
@@ -445,6 +512,15 @@ function homeView(){
         <span class="go"><span data-ver="${a.id}">${appVersion(a.id)}</span> · Get it →</span>
       </a>`).join("")}
     </div>
+    ${paidLive ? `<div class="home-label">Paid Software</div>
+    <div class="apps">
+      ${PRODUCTS.filter(isPaid).map(a => `<a class="card" href="#${a.id}" style="--c:${a.color}">
+        <span class="dot">${ICONS[a.icon]}</span>
+        <h2>${a.name}</h2>
+        <p>${a.tag}</p>
+        <span class="go"><span data-ver="${a.id}">${appVersion(a.id)}</span> · ${fromPrice(a.id) ? "From " + fromPrice(a.id) + " · " : ""}Get it →</span>
+      </a>`).join("")}
+    </div>` : ""}
     ${credits()}
   </div>`;
 }
@@ -521,7 +597,7 @@ function sheetToLog(rows){
     if (!cur.app || !cur.version) continue;
     last = cur;
     const key = cur.app.toLowerCase();
-    const app = APPS.find(a => a.id === key || a.name.toLowerCase() === key);
+    const app = PRODUCTS.find(a => a.id === key || a.name.toLowerCase() === key);
     if (!app) continue;
     const list = out[app.id] = out[app.id] || [];
     let rel = list.find(x => x.version === cur.version);
@@ -563,8 +639,82 @@ function changelog(app){
   </section>`;
 }
 
+/* Store sheet: columns App | Plan | Price | Period | Description | Payment Link | Badge */
+let STORE_PLANS = null, STORE_STATE = CONFIG.storeSheet ? "loading" : "off";
+const SELECTED = {};
+const safeLink = v => /^https:\/\//i.test(String(v || "").trim()) ? String(v).trim() : "";
+function storeToPlans(rows){
+  const head = (rows.shift() || []).map(h => h.trim().toLowerCase());
+  const col = n => head.indexOf(n);
+  const out = {}; let lastApp = "";
+  for (const r of rows){
+    const get = n => (col(n) >= 0 ? (r[col(n)] || "").trim() : "");
+    const appName = get("app") || lastApp; const plan = get("plan");
+    if (!appName || !plan) continue;
+    lastApp = appName;
+    const key = appName.toLowerCase();
+    const app = PRODUCTS.find(a => a.id === key || a.name.toLowerCase() === key);
+    if (!app) continue;
+    (out[app.id] = out[app.id] || []).push({
+      plan: esc(plan), price: esc(get("price")), period: esc(get("period")), description: esc(get("description")),
+      link: safeLink(get("payment link") || get("link")), badge: esc(get("badge"))
+    });
+  }
+  return out;
+}
+function plansFor(id){ return (STORE_STATE === "ready" && STORE_PLANS[id]) || PLANS[id] || []; }
+function fromPrice(id){ const p = plansFor(id); return p.length ? p[0].price : ""; }
+function loadStore(){
+  if (!CONFIG.storeSheet) return;
+  const url = CONFIG.storeSheet + (CONFIG.storeSheet.includes("?") ? "&" : "?") + "t=" + Date.now();
+  fetch(url, { cache: "no-store" })
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
+    .then(t => { STORE_PLANS = storeToPlans(parseCSV(t)); STORE_STATE = "ready"; })
+    .catch(() => { STORE_STATE = "failed"; })
+    .finally(() => {
+      const slot = document.getElementById("plan-slot");
+      const app = slot && PRODUCTS.find(a => a.id === slot.dataset.app);
+      if (app) slot.outerHTML = planPicker(app);
+      if (!location.hash || location.hash === "#home") route(true);
+    });
+}
+function buyButton(p){
+  return p && p.link
+    ? `<a class="btn buy-btn" id="buy-btn" href="${p.link}" target="_blank" rel="noopener">${ICONS.key}Buy ${p.plan} · ${p.price}</a>`
+    : `<span class="btn pending buy-btn" id="buy-btn">${ICONS.key}Checkout coming soon</span>`;
+}
+function planPicker(app){
+  if (STORE_STATE === "loading") return `<section class="buy" id="plan-slot" data-app="${app.id}"><div class="buy-head"><h2>Choose your license</h2></div><p class="buy-note">Loading plans…</p></section>`;
+  const plans = plansFor(app.id);
+  if (!plans.length) return `<section class="buy" id="plan-slot" data-app="${app.id}"><div class="buy-head"><h2>Choose your license</h2></div><p class="buy-note">Plans are coming soon.</p></section>`;
+  let sel = SELECTED[app.id];
+  if (sel == null || sel >= plans.length){ sel = plans.findIndex(p => p.badge); if (sel < 0) sel = 0; SELECTED[app.id] = sel; }
+  return `<section class="buy" id="plan-slot" data-app="${app.id}" aria-label="Choose your license">
+    <div class="buy-head"><h2>Choose your license</h2><span>Key emailed instantly</span></div>
+    <div class="plans" role="radiogroup" aria-label="License plans">
+      ${plans.map((p, i) => `<label class="plan${i === sel ? " on" : ""}">
+        <input type="radio" name="plan-${app.id}" value="${i}" data-app="${app.id}"${i === sel ? " checked" : ""}>
+        <span class="plan-top"><b>${p.plan}</b>${p.badge ? `<em>${p.badge}</em>` : ""}</span>
+        <span class="plan-price">${p.price}<small>${p.period}</small></span>
+        ${p.description ? `<span class="plan-desc">${p.description}</span>` : ""}
+        <span class="plan-check" aria-hidden="true"></span>
+      </label>`).join("")}
+    </div>
+    <div class="buy-row">${buyButton(plans[sel])}<span class="buy-note">Your license key arrives by email and on the receipt. Paste it into ${app.name} to activate.</span></div>
+  </section>`;
+}
+main.addEventListener("change", e => {
+  const t = e.target;
+  if (!t.matches || !t.matches('.plans input[type="radio"]')) return;
+  const id = t.dataset.app, i = +t.value;
+  SELECTED[id] = i;
+  document.querySelectorAll(".plans .plan").forEach((el, k) => el.classList.toggle("on", k === i));
+  const btn = document.getElementById("buy-btn");
+  if (btn) btn.outerHTML = buyButton(plansFor(id)[i]);
+});
+
 function appView(app){
-  const cfg = CONFIG.apps[app.id] || {};
+  const cfg = Object.assign({ gif: app.gif || "" }, CONFIG.apps[app.id] || {});
   const opts = [];
   if (cfg.download) opts.push(`<div class="dl-opt">
       <a class="btn" href="${cfg.download}" target="_blank" rel="noopener">${ICONS.down}Download Portable</a>
@@ -582,8 +732,9 @@ function appView(app){
     <p class="lead">${app.blurb}</p>
     <div class="dl">${btn}</div>
     <div class="meta">
-      <span class="chip" data-ver="${app.id}">${appVersion(app.id)}</span><span class="chip">Windows 10 / 11</span><span class="chip">64-bit</span><span class="chip">Free</span>
+      <span class="chip" data-ver="${app.id}">${appVersion(app.id)}</span><span class="chip">Windows 10 / 11</span><span class="chip">64-bit</span><span class="chip">${isPaid(app) ? "Paid · license key" : "Free"}</span>
     </div>
+    ${isPaid(app) ? planPicker(app) : ""}
     <ul class="features">${app.features.map(f => `<li>${f}</li>`).join("")}</ul>
     <div class="steps-head"><h2>Install it step by step</h2><span>${app.steps.length} steps · about 2 minutes</span></div>
     <ol class="steps">${app.steps.map(s => `<li><div><h3>${s[0]}</h3><p>${s[1]}</p></div></li>`).join("")}</ol>
@@ -608,17 +759,17 @@ function paidView(p){
   </div>`;
 }
 
-function route(){
+function route(keepScroll){
   const id = (location.hash || "#home").slice(1);
-  const app = APPS.find(a => a.id === id);
-  const paid = PAID.find(p => p.id === id);
+  const app = PRODUCTS.find(a => a.id === id);
+  const paid = !app && PAID.find(p => p.id === id);
   main.innerHTML = app ? appView(app) : paid ? paidView(paid) : homeView();
   const color = app ? app.color : paid ? PAID_COLOR : "#7c8cff";
   document.documentElement.style.setProperty("--accent", color);
   field.tint = color;
   nav.querySelectorAll("a").forEach(a => a.classList.toggle("active", a.dataset.id === (app || paid ? id : "home")));
   document.body.classList.remove("open");
-  window.scrollTo(0,0);
+  if (keepScroll !== true) window.scrollTo(0,0);
 }
 
 document.getElementById("menuBtn").addEventListener("click", () => document.body.classList.toggle("open"));
@@ -668,9 +819,10 @@ const field = (() => {
   return { set tint(v){ state.tint = v; if (reduce) frame(); } };
 })();
 
-addEventListener("hashchange", route);
+addEventListener("hashchange", () => route());
 route();
 loadSheet();
+loadStore();
 </script>
 </body>
 </html>
