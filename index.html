@@ -92,6 +92,58 @@ ol.steps h3{font-size:16px;margin:9px 0 4px}
 ol.steps p{margin:0;color:var(--muted);font-size:14px;max-width:62ch}
 code,kbd{font-family:var(--mono);font-size:12.5px;background:rgba(255,255,255,.06);border:1px solid var(--line);padding:1px 6px;border-radius:6px;color:var(--fg)}
 
+/* Tool page: content + hanging GIF sign */
+.app-layout{max-width:1240px;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px 56px;align-items:start}
+.col-main{min-width:0}
+.col-side{position:sticky;top:28px;min-width:0}
+.col-full{grid-column:1/-1;min-width:0}
+.sign{position:relative;padding-top:52px;transform-origin:50% 6px;animation:swing 7s ease-in-out infinite}
+.hook{position:absolute;top:0;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--panel-solid);border:2px solid color-mix(in srgb,var(--c) 60%,var(--line));box-shadow:0 0 14px -2px var(--c);z-index:1}
+.sign::before,.sign::after{content:"";position:absolute;top:7px;left:50%;width:2px;height:64px;margin-left:-1px;transform-origin:50% 0;background:linear-gradient(color-mix(in srgb,var(--c) 70%,transparent),var(--line))}
+.sign::before{transform:rotate(48deg)}
+.sign::after{transform:rotate(-48deg)}
+.board{position:relative;border-radius:18px;padding:16px;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 16%,var(--panel-solid)),var(--panel-solid) 60%);border:1px solid color-mix(in srgb,var(--c) 35%,var(--line));box-shadow:0 30px 60px -24px rgba(0,0,0,.8),0 0 60px -20px var(--c)}
+.screw{position:absolute;width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#c9cde0,#5b6075)}
+.screw.tl{top:9px;left:9px}.screw.tr{top:9px;right:9px}.screw.bl{bottom:9px;left:9px}.screw.br{bottom:9px;right:9px}
+.plate{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 8px 12px}
+.plate .eyebrow{font-size:11px}
+.live{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg);padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--c) 20%,transparent);border:1px solid color-mix(in srgb,var(--c) 45%,transparent)}
+.live i{width:6px;height:6px;border-radius:50%;background:var(--c);animation:blink 1.4s ease-in-out infinite}
+.win{border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#0b0d14}
+.win-bar{display:flex;align-items:center;gap:8px;height:30px;padding-left:10px;font-size:12px;color:var(--muted);background:#151826;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden}
+.win-bar .mini{width:14px;height:14px;border-radius:4px;background:var(--c);flex:none}
+.win-bar .t{overflow:hidden;text-overflow:ellipsis}
+.win-ctrl{margin-left:auto;display:flex;flex:none}
+.win-ctrl span{width:34px;height:30px;display:grid;place-items:center;font-size:13px;color:var(--muted)}
+.win-ctrl span:last-child{color:var(--fg)}
+.screen{position:relative;aspect-ratio:16/10;max-width:100%;overflow:hidden;background:radial-gradient(120% 90% at 30% 20%,color-mix(in srgb,var(--c) 30%,#0b0d14),#0b0d14 70%)}
+.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+/* animated placeholder: cursor opens Start, clicks the app, window pops up */
+.m-bar{position:absolute;left:0;right:0;bottom:0;height:13%;background:rgba(18,20,32,.92);border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;gap:5%}
+.m-bar b{width:5.5%;aspect-ratio:1;border-radius:3px;background:rgba(255,255,255,.18)}
+.m-bar b.start{background:#4aa3ff}
+.m-bar b.app{background:var(--c);opacity:0;animation:appIcon 7s infinite}
+.m-menu{position:absolute;left:30%;width:40%;top:30%;height:53%;border-radius:6px;background:rgba(28,30,46,.96);border:1px solid rgba(255,255,255,.08);padding:5%;display:grid;grid-template-columns:repeat(3,1fr);gap:7%;align-content:start;opacity:0;transform:translateY(12%);animation:menu 7s infinite}
+.m-menu b{aspect-ratio:1;border-radius:3px;background:rgba(255,255,255,.12)}
+.m-menu b.hit{background:var(--c);box-shadow:0 0 10px var(--c)}
+.m-win{position:absolute;left:20%;top:12%;width:60%;height:66%;border-radius:6px;background:#141725;border:1px solid color-mix(in srgb,var(--c) 50%,transparent);overflow:hidden;opacity:0;transform:scale(.6);animation:pop 7s infinite}
+.m-win::before{content:"";display:block;height:14%;background:var(--c)}
+.m-win::after{content:"";position:absolute;left:8%;right:8%;top:28%;bottom:14%;background:repeating-linear-gradient(rgba(255,255,255,.1) 0 8%,transparent 8% 18%)}
+.m-cursor{position:absolute;width:5.5%;left:72%;top:28%;animation:cursor 7s infinite;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
+.soon{position:absolute;left:10px;top:10px;font-family:var(--mono);font-size:10.5px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,.55);color:var(--fg);border:1px solid var(--line)}
+.sign-steps{display:flex;flex-wrap:wrap;gap:6px;padding:12px 4px 0;list-style:none;margin:0}
+.sign-steps li{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.sign-steps li span{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;font-family:var(--mono);font-size:10.5px;background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--c)}
+.sign-steps li:not(:last-child)::after{content:"→";margin-left:2px;opacity:.5}
+.sign-cap{margin:10px 4px 0;font-size:13px;color:var(--muted)}
+@keyframes swing{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+@keyframes blink{50%{opacity:.25}}
+@keyframes cursor{0%{left:72%;top:28%}18%,24%{left:39%;top:89%}40%,50%{left:49%;top:47%}62%,100%{left:80%;top:70%}}
+@keyframes menu{0%,22%{opacity:0;transform:translateY(12%)}27%,50%{opacity:1;transform:none}55%,100%{opacity:0;transform:translateY(6%)}}
+@keyframes pop{0%,52%{opacity:0;transform:scale(.6)}60%,92%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
+@keyframes appIcon{0%,55%{opacity:0}60%,92%{opacity:1}100%{opacity:0}}
+@media (max-width:1180px){.app-layout{grid-template-columns:minmax(0,1fr)}.col-side{position:static;max-width:460px;width:100%}}
+
 /* Credits */
 .credits{margin-top:64px;padding:28px;border-radius:18px;border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);position:relative;overflow:hidden}
 .credits::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.05) 50%,transparent 70%);background-size:250% 100%;animation:sheen 6s linear infinite;pointer-events:none}
@@ -148,14 +200,15 @@ footer{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--mute
 /* ============================================================
    EDIT THESE: paste your links here.
    Leave a download "" and its button shows "Download coming soon".
+   gif: link to a .gif showing how to open the app (blank = animated demo).
    ============================================================ */
 const CONFIG = {
   discordInvite: "https://discord.gg/tCBK8pGMB5",
   apps: {
-    "taskbar-studio": { download: "", version: "v1.0.0", size: "" },
-    "server-studio":  { download: "", version: "v1.0.0", size: "" },
-    "bot-studio":     { download: "", version: "v1.0.0", size: "" },
-    "beat-studiox":   { download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567751347149873162/Beat_Studio_X.zip?ex=6aed51b8&is=6aec0038&hm=abc31a2a153012903ed5c1be86e11fd0a8dafd5d03fa3321ca29b39931200483&", version: "v1.0.0", size: "95 MB" }
+    "taskbar-studio": { download: "", gif: "taskbar.gif", version: "v1.0.0", size: "" },
+    "server-studio":  { download: "", gif: "server.gif", version: "v1.0.0", size: "" },
+    "bot-studio":     { download: "", gif: "bot.gif", version: "v1.0.0", size: "" },
+    "beat-studiox":   { download: "", gif: "beat.gif", version: "v1.0.0", size: "" }
   }
 };
 
@@ -173,9 +226,9 @@ const APPS = [
     tag:"Restyle the Windows taskbar",
     blurb:"Pick a theme, watch your taskbar change. Static and animated themes, a settings tab, and it keeps running quietly from the hidden icons tray.",
     features:["Theme gallery with live apply","Animated themes in their own tab","Runs from the system tray when closed","Auto-hiding sidebar and settings page"],
-    exe:"Taskbar Studio .exe",
+    exe:"Taskbar Studio Setup.exe",
     steps:[
-      ["Download the installer","Press the download button above. Your browser saves <code>Taskbar Studio .exe</code> to your Downloads folder."],
+      ["Download the installer","Press the download button above. Your browser saves <code>Taskbar Studio Setup.exe</code> to your Downloads folder."],
       ["Run the installer","Open the file. If Windows SmartScreen shows <em>Windows protected your PC</em>, click <b>More info</b> then <b>Run anyway</b>. This appears because the app isn't code-signed yet."],
       ["Launch Taskbar Studio","Open it from the Start menu or the desktop shortcut."],
       ["Pick a theme","Click any theme on the main page to apply it. Open the <b>Animated</b> tab in the sidebar for moving themes."],
@@ -185,9 +238,9 @@ const APPS = [
     tag:"Build a Discord server from a template",
     blurb:"Choose a template, pick your server, press build. Channels, categories and roles get created for you while a live preview shows the result.",
     features:["Built-in server templates","Bot token loads your servers automatically","Progress bar while it builds","Live preview of the layout"],
-    exe:"Server Studio .exe",
+    exe:"Server Studio Setup.exe",
     steps:[
-      ["Download the installer","Press the download button above to save <code>Server Studio .exe</code>."],
+      ["Download the installer","Press the download button above to save <code>Server Studio Setup.exe</code>."],
       ["Run the installer","Open the file. On the SmartScreen warning click <b>More info</b> then <b>Run anyway</b>."],
       ["Create a bot","Go to the Discord Developer Portal, create an application, add a bot and copy its token. Invite the bot to your server with <b>Administrator</b> permission."],
       ["Paste your token","Paste the token into Server Studio. Your servers load into the dropdown automatically."],
@@ -197,9 +250,9 @@ const APPS = [
     tag:"Host multiple Discord bots at once",
     blurb:"Run all your Discord bots from one window. See which are online, edit each bot's profile, and chat through them live.",
     features:["Host several bots side by side","Active, inactive and error status","Per-bot profile editor","Live chat tab"],
-    exe:"Bot Studio .exe",
+    exe:"Bot Studio Setup.exe",
     steps:[
-      ["Download the installer","Press the download button above to save <code>Bot Studio .exe</code>."],
+      ["Download the installer","Press the download button above to save <code>Bot Studio Setup.exe</code>."],
       ["Run the installer","Open the file. On the SmartScreen warning click <b>More info</b> then <b>Run anyway</b>."],
       ["Add a bot","Click add, paste your bot token from the Discord Developer Portal, and save."],
       ["Start it","Your bot appears in the list. The status turns green when it's online, red if something went wrong."],
@@ -209,9 +262,9 @@ const APPS = [
     tag:"Make music by dragging sounds onto performers",
     blurb:"Drag a sound onto a performer and they start playing, perfectly in time. Stack beats, melodies and voices into a full track.",
     features:["Drag-and-drop sound icons","Everything auto-mixes in time","Up to 7 extra rows of performers","Large library of sounds"],
-    exe:"Beat-StudioX .exe",
+    exe:"Beat-StudioX Setup.exe",
     steps:[
-      ["Download the installer","Press the download button above to save <code>Beat-StudioX .exe</code>."],
+      ["Download the installer","Press the download button above to save <code>Beat-StudioX Setup.exe</code>."],
       ["Run the installer","Open the file. On the SmartScreen warning click <b>More info</b> then <b>Run anyway</b>."],
       ["Open Beat-StudioX","Launch it from the Start menu. Turn your volume up."],
       ["Drag a sound onto a performer","Pick any icon from the sound bar and drop it on a performer. They join in on the next beat."],
@@ -270,12 +323,37 @@ function homeView(){
   </div>`;
 }
 
+function gifSign(app, cfg){
+  const cursor = `<svg class="m-cursor" viewBox="0 0 16 22" aria-hidden="true"><path d="M1 1v17l4.5-4.2 3 6.7 2.8-1.3-3-6.6H14z" fill="#fff" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+  const media = cfg.gif
+    ? `<img src="${cfg.gif}" alt="Animated walkthrough: opening ${app.name}" loading="lazy">`
+    : `<div class="m-win"></div>
+       <div class="m-menu"><b></b><b></b><b></b><b></b><b class="hit"></b><b></b></div>
+       <div class="m-bar"><b class="start"></b><b></b><b class="app"></b><b></b></div>
+       ${cursor}
+       <span class="soon">GIF preview coming soon</span>`;
+  return `<div class="sign" role="figure" aria-label="How to open ${app.name}">
+    <span class="hook" aria-hidden="true"></span>
+    <div class="board">
+      <span class="screw tl"></span><span class="screw tr"></span><span class="screw bl"></span><span class="screw br"></span>
+      <div class="plate"><span class="eyebrow">Quick start</span><span class="live"><i></i>${cfg.gif ? "Preview" : "Demo"}</span></div>
+      <div class="win">
+        <div class="win-bar"><span class="mini"></span><span class="t">How to open ${app.name}</span><span class="win-ctrl"><span>–</span><span>□</span><span>×</span></span></div>
+        <div class="screen">${media}</div>
+      </div>
+      <ol class="sign-steps">${app.steps.slice(0,3).map((s,i)=>`<li><span>${i+1}</span>${s[0].replace(/ the installer$/,"")}</li>`).join("")}</ol>
+      <p class="sign-cap">Up and running in under a minute.</p>
+    </div>
+  </div>`;
+}
+
 function appView(app){
   const cfg = CONFIG.apps[app.id] || {};
   const btn = cfg.download
     ? `<a class="btn" href="${cfg.download}" target="_blank" rel="noopener">${ICONS.down}Download for Windows</a>`
     : `<span class="btn pending">${ICONS.down}Download coming soon</span>`;
-  return `<div class="page" style="--c:${app.color}">
+  return `<div class="page app-layout" style="--c:${app.color}">
+    <div class="col-main">
     <div class="hero-row"><span class="dot">${ICONS[app.icon]}</span><div class="eyebrow">${app.tag}</div></div>
     <h1>${app.name}</h1>
     <p class="lead">${app.blurb}</p>
@@ -286,7 +364,9 @@ function appView(app){
     <ul class="features">${app.features.map(f => `<li>${f}</li>`).join("")}</ul>
     <div class="steps-head"><h2>Install it step by step</h2><span>${app.steps.length} steps · about 2 minutes</span></div>
     <ol class="steps">${app.steps.map(s => `<li><div><h3>${s[0]}</h3><p>${s[1]}</p></div></li>`).join("")}</ol>
-    ${credits()}
+    </div>
+    <aside class="col-side">${gifSign(app, cfg)}</aside>
+    <div class="col-full">${credits()}</div>
   </div>`;
 }
 
