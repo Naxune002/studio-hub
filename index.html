@@ -43,8 +43,6 @@ nav a .ver{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(-
 .discord{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;background:#5865f2;color:#fff;text-decoration:none;font-weight:700;font-size:14px;transition:filter .2s,transform .2s}
 .discord:hover{filter:brightness(1.12);transform:translateY(-1px)}
 .discord svg{width:20px;height:20px}
-.suggest{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);color:var(--fg);text-decoration:none;font-size:13px;font-weight:600}
-.suggest:hover{background:rgba(255,255,255,.04)}
 .made{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;padding-top:6px}
 .made span{background:linear-gradient(90deg,#7c8cff,#4fd1c5,#f472b6);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:500}
 
@@ -140,10 +138,6 @@ footer{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--mute
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.3 4.4A19.7 19.7 0 0 0 15.4 3l-.6 1.3a18.3 18.3 0 0 0-5.6 0L8.6 3a19.6 19.6 0 0 0-4.9 1.5C.6 9.1-.3 13.7.2 18.2a19.8 19.8 0 0 0 6 3l1.3-2a12.8 12.8 0 0 1-2-1l.5-.4a14.1 14.1 0 0 0 12 0l.5.4c-.6.4-1.3.7-2 1l1.3 2a19.7 19.7 0 0 0 6-3c.5-5.2-.9-9.8-3.5-13.8ZM8.5 15.4c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Zm7 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Z"/></svg>
       Join the Discord
     </a>
-    <a class="suggest" id="suggestLink" href="#" target="_blank" rel="noopener">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2Z"/></svg>
-      Suggest a feature
-    </a>
     <div class="made">made by <span>Charles .B</span></div>
   </div>
 </aside>
@@ -156,13 +150,12 @@ footer{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--mute
    Leave a download "" and its button shows "Download coming soon".
    ============================================================ */
 const CONFIG = {
-  discordInvite: "",          // e.g. "https://discord.gg/yourcode"
-  suggestForum:  "",          // link to your suggestions forum channel
+  discordInvite: "https://discord.gg/tCBK8pGMB5",
   apps: {
     "taskbar-studio": { download: "", version: "v1.0.0", size: "" },
     "server-studio":  { download: "", version: "v1.0.0", size: "" },
     "bot-studio":     { download: "", version: "v1.0.0", size: "" },
-    "beat-studiox":   { download: "", version: "v1.0.0", size: "" }
+    "beat-studiox":   { download: "https://cdn.discordapp.com/attachments/1324549623452274719/1567751347149873162/Beat_Studio_X.zip?ex=6aed51b8&is=6aec0038&hm=abc31a2a153012903ed5c1be86e11fd0a8dafd5d03fa3321ca29b39931200483&", version: "v1.0.0", size: "95 MB" }
   }
 };
 
@@ -245,7 +238,6 @@ function setLink(el, url){
   else { el.removeAttribute("href"); el.setAttribute("aria-disabled","true"); el.title = "Link coming soon"; el.style.opacity = ".7"; }
 }
 setLink(document.getElementById("discordLink"), CONFIG.discordInvite);
-setLink(document.getElementById("suggestLink"), CONFIG.suggestForum);
 
 function credits(){
   return `<section class="credits" aria-label="Credits">
